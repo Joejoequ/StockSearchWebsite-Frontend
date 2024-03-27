@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+
+  <div class="col-8">
+    <h2 class="my-5">My Portfolio</h2>
+
+    <h4>Money In Wallet:</h4>
+    <div class="d-flex justify-content-center" *ngIf="isLoading">
+      <mat-spinner  diameter=50></mat-spinner>
+    </div>
+
+    <div class="row" id="stocklist-container">
+      <div *ngFor="let walletStock of responseWalletData" class="card my-2" >
+        <div class="card-header">
+          {{walletStock.ticker}}
+        </div>
+<div class="card-body">
+        <div class="d-flex mb-4">
+
+          <div class="wallet-card-left col-6">
+
+            <div class="watchlist-text-headline">{{watchStock.ticker}}</div>
+            <div>{{watchStock.name}} </div>
+
+          </div>
+
+
+          <div class="wallet-card-right col-6">
+
+
+            <div class="col-5" [ngStyle]="{ 'color': watchStock.priceChange > 0 ? 'green' : watchStock.priceChange < 0 ? 'red' : 'black' }">
+
+              <div class="watchlist-text-headline" >{{watchStock.currentPrice}}</div>
+              <div>
+                <svg *ngIf="watchStock.priceChange>=0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                  <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                </svg>
+
+                <svg *ngIf="watchStock.priceChange<0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                  <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                {{ watchStock.priceChange| number:'1.2-2'}}  ({{ watchStock.percentChange| number:'1.2-2'}}%)</div>
+
+
+
+
+
+            </div>
+
+
+
+
+
+          </div>
+
+
+
+
+
+        </div>
+
+</div>
+        <div class="card-footer text-muted">
+          2 days ago
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+
+  </div>
+</div>

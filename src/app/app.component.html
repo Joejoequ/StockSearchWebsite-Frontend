@@ -1,0 +1,40 @@
+
+
+
+
+<div class="content">
+<div>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-sm" style="background-color: #2324AA;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Stock Search</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse d-flex justify-content-lg-end justify-content-center" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" routerLink="{{getSearchRoute()}}" routerLinkActive="active">Search</a>
+          <a class="nav-link"  routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
+          <a class="nav-link" routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
+
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>
+<footer class=" text-center ">
+
+  <div class="text-center p-2 " style="background-color: rgba(0, 0, 0, 0.12);">
+    Powered by
+    <a  href="https://finnhub.io/">Finnhub.io</a>
+  </div>
+
+
+
+</footer>
+</div>
+
+
+
+

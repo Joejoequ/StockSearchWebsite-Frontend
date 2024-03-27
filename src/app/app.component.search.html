@@ -1,0 +1,368 @@
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&version=v19.0" nonce="I70BBqWp"></script>
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+
+
+<div>
+
+
+
+
+
+
+  <h2 id="title" class="text-center">STOCK SEARCH</h2>
+  <div id="search-container">
+    <form  [formGroup]="form" id="search-form"  (ngSubmit)="onSearchFormSubmit()" class=" border border-3 rounded-pill  col-lg-3 col-md-6 col-sm-7 col-8 d-flex align-items-center">
+
+      <div class="me-auto">
+
+        <input id="search-form-input"  type="text"  class="form-control border-0"  [matAutocomplete]="auto" formControlName="symbol" placeholder="Enter stock ticker symbol" >
+
+        <mat-autocomplete #auto="matAutocomplete">
+
+          <mat-option *ngIf="autocomplete_isLoading" disabled="true"><mat-spinner  diameter=25></mat-spinner></mat-option>
+
+          @for (option of filteredOptions | async; track option) {
+          <mat-option *ngIf="!autocomplete_isLoading"  routerLink="/search/{{option.symbol}}" [value]="option.symbol">{{option.symbol}} | {{option.description}}</mat-option>
+          }
+        </mat-autocomplete>
+
+      </div>
+
+      <button id="search-form-search" class="btn border-0" type="submit">
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="0.9rem" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+        </button>
+
+
+      <button id="search-form-clear" class="btn border-0" (click)="onSearchFormClear()" type="reset">
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+        </svg>
+
+      </button>
+
+    </form>
+  </div>
+
+<div class="d-flex justify-content-center mt-4" *ngIf="this.searchService.isSearching">
+
+  <mat-spinner   diameter=50></mat-spinner>
+</div>
+<div class="d-flex justify-content-center">
+  <ngb-alert *ngIf="this.searchService.showSearchResult&&(this.searchService.responseProfileData&&!this.searchService.responseProfileData.ticker)" [dismissible]="false" type='danger' class="text-center mt-5 col-10 col-lg-8">No data found. Please enter a valid Ticker </ngb-alert>
+</div>
+  <ng-container *ngIf="this.searchService.showSearchResult&&this.searchService.responseProfileData&&this.searchService.responseProfileData.ticker" >
+
+<div class="d-flex justify-content-center mt-4">
+<div class="col-9">
+  <ng-container *ngFor="let alert of watchlistAlerts">
+    <ngb-alert class="text-center"  [type]="alert.type" (closed)="closeAlert(alert.id)">
+      {{ alert.message }}
+
+
+
+    </ngb-alert>
+  </ng-container>
+</div>
+</div>
+
+
+
+
+    <div *ngIf="this.searchService.responseProfileData && this.searchService.responseQuoteData" class="justify-content-center row" id="search-result-profile">
+
+
+      <div class="justify-content-between col-10 col-lg-8 d-flex">
+
+
+        <div class="col-5" >
+          <div class="d-flex justify-content-center" id="search-result-profile-ticker"><div>{{this.searchService.responseProfileData.ticker}}</div>
+
+
+            <button *ngIf="!responseIfStockInWatchlist" (click)="addToWatchList()" class="btn search-result-favorite" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+              <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+            </svg>
+            </button>
+
+
+
+            <button *ngIf="responseIfStockInWatchlist"  (click)="removeFromWatchList(this.userService.getUserId(),this.searchService.responseProfileData.ticker)" class="btn search-result-favorite" >
+
+              <svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fae10b" class="bi bi-star-fill" viewBox="0 0 16 16">
+                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+              </svg>
+
+            </button>
+
+
+
+
+
+
+
+
+
+          </div>
+          <div class="text-center text-secondary" id="search-result-profile-name">{{ this.searchService.responseProfileData.name}}</div>
+
+
+          <div class="text-center text-secondary" id="search-result-profile-exchange">{{ this.searchService.responseProfileData.exchange}}</div>
+
+          <div class="text-center">
+            <button class="btn btn-success">Buy</button>
+            <button class="btn btn-danger">Sell</button>
+          </div>
+        </div>
+
+
+
+        <div class="d-flex flex-column align-items-center justify-content-between col-2">
+
+
+          <img  id="search-result-profile-logo" class="col-9 col-lg-6  " src="{{this.searchService.responseProfileData.logo}}"   >
+
+        </div>
+
+
+        <div class="col-5" [ngStyle]="{ 'color': this.searchService.responseQuoteData.d > 0 ? 'green' : this.searchService.responseQuoteData.d < 0 ? 'red' : 'black' }">
+
+          <div class="text-center" id="search-result-quote-price">{{ this.searchService.responseQuoteData.c}}</div>
+          <div class="text-center" id="search-result-quote-change">
+            <svg *ngIf="this.searchService.responseQuoteData.d>=0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+              <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+            </svg>
+
+            <svg *ngIf="this.searchService.responseQuoteData.d<0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg>
+            {{ this.searchService.responseQuoteData.d| number:'1.2-2'}}  ({{this.searchService.responseQuoteData.dp| number:'1.2-2'}}%)</div>
+
+          <div class="text-center text-secondary" id="search-result-quote-current" >{{ this.searchService.currentTime}}  </div>
+
+
+
+        </div>
+
+      </div>
+
+      <div  [ngStyle]="{ 'color':  'green' }" class="text-center col-10 search-result-profile-status " *ngIf="isTrading(this.searchService.responseQuoteData.t)">Market is Open</div>
+
+      <div  [ngStyle]="{ 'color': 'red' }" class="text-center col-10 search-result-profile-status " *ngIf="!isTrading(this.searchService.responseQuoteData.t)" >Market Closed on {{getFormattedDate(this.searchService.responseQuoteData.t)}}</div>
+
+
+
+
+    </div>
+
+
+    <div id="search-result-tab" class="d-flex justify-content-center" >
+      <mat-tab-group animationDuration="0ms"  class="col-9">
+
+
+        <mat-tab label="Summary" >
+          <div class="d-flex">
+            <div id="summary-tab-left " class="col-6">
+              <div id="summary-tab-price" class="col-6 text-center" *ngIf="this.searchService.responseQuoteData">
+                <div><b>High Price:</b>{{ this.searchService.responseQuoteData.h}}</div>
+                <div><b>Low Price:</b>{{ this.searchService.responseQuoteData.l}}</div>
+                <div><b>Open Price:</b>{{ this.searchService.responseQuoteData.o}}</div>
+                <div><b>Prev close:</b>{{ this.searchService.responseQuoteData.pc}}</div>
+              </div>
+
+              <div id="summary-tab-about" class=" d-flex flex-column align-items-center col-12" *ngIf="this.searchService.responsePeerData&&this.searchService.responseProfileData">
+                <label id="about-label">About the Company</label>
+                <div><b>IPO Start Date:</b>{{ this.searchService.responseProfileData.ipo}}</div>
+                <div><b>Industry:</b>{{ this.searchService.responseProfileData.finnhubIndustry}}</div>
+                <div><b>Web Page:</b><a target="_blank" href="{{ this.searchService.responseProfileData.weburl}}">{{ this.searchService.responseProfileData.weburl }}</a></div>
+                <div><b>Company peers:</b><br></div>
+
+                <div ><a routerLink="/search/{{item}}" *ngFor="let item of this.searchService.responsePeerData">{{ item+" " }}</a></div>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+            <div id="summary-tab-right" class="col-6" *ngIf="highcharts&&this.searchService.hourChartOptions">
+              <highcharts-chart
+                [Highcharts]="highcharts"
+                [options]="this.searchService.hourChartOptions"
+
+                style="width: 100%; height: 400px; display: block;"
+              ></highcharts-chart>
+            </div>
+
+          </div>
+        </mat-tab>
+
+
+
+
+
+        <mat-tab label="Top News">
+
+
+          <div class="row" id="news-container">
+            <div *ngFor="let news of this.searchService.responseNewsData; let i = index" (click)="openNewsModal(content, i)" class="col-6 news-card-container d-flex align-items-center py-2 pe-2">
+
+              <div  class="bg-light card full-height " >
+                <div class="d-flex full-height">
+                  <div class="col-3 d-flex align-items-center justify-content-center p-3">
+                    <img src="{{news.image}}" class="news-image " >
+                  </div>
+                  <div class="col-9 d-flex align-items-center">
+                    <div class="card-body ">
+
+                      <p class="card-text text-center news-headline">{{news.headline}}</p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <ng-template #content let-modal>
+            <div class="modal-header">
+              <div>
+                <h3 class="modal-title" id="modal-basic-title">{{this.searchService.responseNewsData[modalIndex].source}}</h3>
+                <p class="text-secondary">
+                  {{getNewsFormatDate(this.searchService.responseNewsData[modalIndex].datetime)}}</p>
+              </div>
+              <button type="button" class="news-modal-close-btn btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+
+            </div>
+            <div class="modal-body">
+              <h5 >{{this.searchService.responseNewsData[modalIndex].headline}}</h5>
+              <p class="text-secondary news-summary">{{this.searchService.responseNewsData[modalIndex].summary}}</p>
+              <p class="text-muted news-url">For more details, click <a target="_blank" href="{{this.searchService.responseNewsData[modalIndex].url}}">here</a></p>
+            </div>
+            <div class="m-3 border border-secondary-subtle news-share-box rounded">
+
+              <label class="text-secondary m-3">Share</label>
+
+
+              <div class="news-share-buttons d-flex mx-3">
+                <div >
+                  <a class="twitter-share-button" target="_blank"
+                     href="https://twitter.com/intent/tweet?text={{this.searchService.responseNewsData[modalIndex].headline}}&url={{this.searchService.responseNewsData[modalIndex].url}}">
+                    <svg width="2.3rem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+                  </a>
+                </div>
+
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{this.searchService.responseNewsData[modalIndex].url}}" class="fb-xfbml-parse-ignore"><svg width="2rem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64h98.2V334.2H109.4V256h52.8V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H255V480H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"/></svg></a>
+              </div>
+
+
+
+            </div>
+          </ng-template>
+
+
+        </mat-tab>
+
+
+        <mat-tab label="Charts">
+
+          <highcharts-chart *ngIf= "highcharts&&this.searchService.yearChartOptions"
+                            [Highcharts]="highcharts"
+                            [options]="this.searchService.yearChartOptions"
+
+                            style="width: 100%; height: 800px; display: block;"
+          ></highcharts-chart>
+
+        </mat-tab>
+
+        <mat-tab label="Insights">
+
+          <div id="insider-container">
+
+
+            <div class="insider-sentiment d-flex justify-content-center" *ngIf="this.searchService.responseInsiderData">
+              <div class="col-6"><h4 class="text-center">Insider Sentiments</h4>
+
+                <table class="col-12 my-3" >
+                  <tr>
+                    <th>{{this.searchService.responseProfileData.name}}</th>
+                    <th>MSPR</th>
+                    <th>Change</th>
+                  </tr>
+                  <tr>
+                    <th>Total</th>
+                    <td>{{this.searchService.responseInsiderData.totalMsprSum| number:'1.0-2'}}</td>
+                    <td>{{this.searchService.responseInsiderData.totalChangeSum| number:'1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <th>Positive</th>
+                    <td>{{this.searchService.responseInsiderData.positiveMsprSum| number:'1.0-2'}}</td>
+                    <td>{{this.searchService.responseInsiderData.positiveChangeSum| number:'1.0-2'}}</td>
+                  </tr>
+                  <tr>
+                    <th>Negative</th>
+                    <td>{{this.searchService.responseInsiderData.negativeMsprSum| number:'1.0-2'}}</td>
+                    <td>{{this.searchService.responseInsiderData.negativeChangeSum| number:'1.0-2'}}</td>
+                  </tr>
+                </table></div>
+
+
+            </div >
+            <div class="d-flex">
+              <div class="recommendation-trend col-6 my-3 mx-2" >
+                <highcharts-chart *ngIf= "highcharts&&this.searchService.recommendChartOptions"
+                                  [Highcharts]="highcharts"
+                                  [options]="this.searchService.recommendChartOptions"
+
+                                  style="width: 100%; height: 400px; display: block;"
+                ></highcharts-chart>
+
+              </div>
+
+              <div class="eps-chart">
+                <highcharts-chart *ngIf= "highcharts&&this.searchService.epsChartOptions"
+                                  [Highcharts]="highcharts"
+                                  [options]="this.searchService.epsChartOptions"
+
+                                  style="width: 100%; height: 400px; display: block;"
+                ></highcharts-chart>
+
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+
+        </mat-tab>
+      </mat-tab-group>
+
+    </div>
+
+  </ng-container>
+
+</div>
