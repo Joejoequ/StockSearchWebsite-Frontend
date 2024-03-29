@@ -7,7 +7,8 @@ export class UserService {
   userId: string;
 
   constructor() {
-    this.userId = uuidv4();
+    //this.userId = uuidv4();
+    this.userId = "test";
   }
 
   getUserId(): string {

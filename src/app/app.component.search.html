@@ -73,14 +73,7 @@
 
 <div class="d-flex justify-content-center mt-4">
 <div class="col-9">
-  <ng-container *ngFor="let alert of watchlistAlerts">
-    <ngb-alert class="text-center"  [type]="alert.type" (closed)="closeAlert(alert.id)">
-      {{ alert.message }}
-
-
-
-    </ngb-alert>
-  </ng-container>
+  <alert-list></alert-list>
 </div>
 </div>
 
@@ -128,8 +121,8 @@
           <div class="text-center text-secondary" id="search-result-profile-exchange">{{ this.searchService.responseProfileData.exchange}}</div>
 
           <div class="text-center">
-            <button class="btn btn-success">Buy</button>
-            <button class="btn btn-danger">Sell</button>
+            <button (click)="openBuyModal(this.searchService.responseProfileData.ticker,this.searchService.responseQuoteData.c)" class="btn btn-success mx-2">Buy</button>
+            <button *ngIf="shouldDisplaySellBtn(this.searchService.responseProfileData.ticker)" (click)="openSellModal(this.searchService.responseProfileData.ticker,this.searchService.responseQuoteData.c)" class="btn btn-danger mx-2">Sell</button>
           </div>
         </div>
 

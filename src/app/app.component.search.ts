@@ -8,7 +8,7 @@ import {SearchService} from "./app.service.search";
 import {HttpClient} from "@angular/common/http";
 import {MatTabsModule} from "@angular/material/tabs";
 
-import { Options } from 'highcharts';
+import {PortfolioService} from "./app.service.portfolio";
 import {HighchartsChartModule} from "highcharts-angular";
 
 import {NgbAlert,  NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -28,7 +28,9 @@ import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { finalize } from 'rxjs/operators';
-
+import {AppComponentAlertList} from "./app.component.alertList";
+import { buyStockModal } from './app.modal.buy';
+import {sellStockModal} from "./app.modal.sell";
 indicators(Highcharts);
 volumeByPrice(Highcharts);
 DragPanes(Highcharts);
@@ -39,7 +41,7 @@ DragPanes(Highcharts);
 @Component({
   selector: 'app-component-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgOptimizedImage, MatTabsModule, HighchartsChartModule, HighchartsChartModule, HighchartsChartModule, MatProgressSpinnerModule, MatAutocompleteModule, MatOptionModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, MatProgressSpinnerModule, NgIf, NgForOf, RouterLink, NgbAlert],
+  imports: [CommonModule, FormsModule, NgOptimizedImage, MatTabsModule, HighchartsChartModule, HighchartsChartModule, HighchartsChartModule, MatProgressSpinnerModule, MatAutocompleteModule, MatOptionModule, FormsModule, MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, MatProgressSpinnerModule, NgIf, NgForOf, RouterLink, NgbAlert, AppComponentAlertList],
   templateUrl: './app.component.search.html',
   styleUrls: ['./app.component.search.css']
 })
@@ -50,8 +52,7 @@ export class AppComponentSearch implements OnInit, OnDestroy{
   filteredOptions!: Observable<any[]>;
   modalIndex!:number;
   highcharts:typeof Highcharts=Highcharts;
-  watchlistAlerts: Array<{ id:number;type: string; message: string }> = [];
-  private nextId = 0;
+
   private modalService = inject(NgbModal);
   autocomplete_isLoading = false;
   private updateSubscription!: Subscription;
@@ -59,9 +60,9 @@ export class AppComponentSearch implements OnInit, OnDestroy{
 
   responseIfStockInWatchlist:boolean = false;
 
+  @ViewChild(AppComponentAlertList) alertListComponent!: AppComponentAlertList;
 
-
-  constructor(public  userService: UserService,public searchService:SearchService, private http: HttpClient,private formBuilder: FormBuilder,private route: ActivatedRoute,private router: Router) {
+  constructor(public portfolioService:PortfolioService,public  userService: UserService,public searchService:SearchService, private http: HttpClient,private formBuilder: FormBuilder,private route: ActivatedRoute,private router: Router) {
 
 this.symbol='';
 
@@ -114,20 +115,7 @@ this.symbol='';
 
     this.updateSubscription.unsubscribe();
   }
-  addAlert(type: string, message: string) {
-    var currentID=this.nextId++;
 
-    this.watchlistAlerts.push({ id:currentID,type, message });
-
-    setTimeout(() => this.closeAlert(currentID), 100000);
-
-  }
-
-
-  closeAlert(id: number) {
-
-    this.watchlistAlerts = this.watchlistAlerts.filter(alert => alert.id !== id);
-  }
 
 
 
@@ -145,7 +133,7 @@ this.symbol='';
         if (response.message == "SUCCESS"){
 
           this.responseIfStockInWatchlist=true;
-          this.addAlert("success",stockSymbol+" added to Watchlist");
+          this.alertListComponent.addAlert("success",stockSymbol+" added to Watchlist");
 
         }
 
@@ -167,7 +155,7 @@ this.symbol='';
         if (response.message == "SUCCESS"){
 
           this.responseIfStockInWatchlist=false;
-          this.addAlert("danger",stockSymbol+" removed from Watchlist");
+          this.alertListComponent.addAlert("danger",stockSymbol+" removed from Watchlist");
 
         }
 
@@ -246,6 +234,69 @@ this.symbol='';
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
 
     );
+  }
+
+
+  openBuyModal(ticker:string,currentPrice:number) {
+    const modalRef = this.modalService.open(buyStockModal);
+
+    modalRef.componentInstance.ticker = ticker;
+    modalRef.componentInstance.currentPrice = currentPrice.toFixed(2);
+
+    modalRef.componentInstance.purchaseResult.subscribe((success: boolean) => {
+
+      if (success){
+        this.alertListComponent.addAlert( "success",ticker+' bought successfully!');
+        this.portfolioService.getLatestPortfolioData();
+      }
+      else{
+        this.alertListComponent.addAlert( "warning",ticker+' bought failed');
+      }
+
+
+
+
+    });
+
+
+
+  }
+
+
+  openSellModal(ticker:string,currentPrice:number) {
+    const modalRef = this.modalService.open(sellStockModal);
+
+    modalRef.componentInstance.ticker = ticker;
+    modalRef.componentInstance.currentPrice = currentPrice;
+
+    modalRef.componentInstance.sellResult.subscribe((success: boolean) => {
+
+      if (success){
+        this.alertListComponent.addAlert( "danger",ticker+' sold successfully!');
+        this.portfolioService.getLatestPortfolioData();
+      }
+      else{
+        this.alertListComponent.addAlert( "warning",ticker+' sold failed');
+      }
+
+
+
+
+    });
+
+
+
+  }
+
+  shouldDisplaySellBtn(tickerToFind:string){
+
+    var result=this.portfolioService.responsePortfolioData.stocks.find((stock:{ticker:string}) => stock.ticker == tickerToFind);
+    if (result){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
 
