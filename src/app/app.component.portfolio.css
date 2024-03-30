@@ -1,0 +1,19 @@
+
+@media (max-width: 768px) {
+.wallet-stock-info-container{
+  display: block!important;
+  font-size: 0.9rem;
+
+  .wallet-stock-data{
+    width: 30%;
+  }
+}}
+.wallet-stock-info-container{
+
+  font-size: 1.2rem;
+}
+
+.wallet-stock-data{
+  width: 40%;
+  text-align: left;
+}

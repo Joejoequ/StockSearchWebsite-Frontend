@@ -28,9 +28,9 @@
 
   <h2 id="title" class="text-center">STOCK SEARCH</h2>
   <div id="search-container">
-    <form  [formGroup]="form" id="search-form"  (ngSubmit)="onSearchFormSubmit()" class=" border border-3 rounded-pill  col-lg-3 col-md-6 col-sm-7 col-8 d-flex align-items-center">
+    <form  [formGroup]="form" id="search-form"  (ngSubmit)="onSearchFormSubmit()" class=" border border-3 rounded-pill  col-lg-3 col-md-6 col-sm-7 col-8 d-flex align-items-center d-flex">
 
-      <div class="me-auto">
+      <div id="search-form-input-container" >
 
         <input id="search-form-input"  type="text"  class="form-control border-0"  [matAutocomplete]="auto" formControlName="symbol" placeholder="Enter stock ticker symbol" >
 
@@ -80,10 +80,10 @@
 
 
 
-    <div *ngIf="this.searchService.responseProfileData && this.searchService.responseQuoteData" class="justify-content-center row" id="search-result-profile">
+    <div *ngIf="this.searchService.responseProfileData && this.searchService.responseQuoteData" class="d-flex flex-column align-items-center w-100" id="search-result-profile">
 
 
-      <div class="justify-content-between col-10 col-lg-8 d-flex">
+      <div class="justify-content-between col-11 col-lg-8 d-flex">
 
 
         <div class="col-5" >
@@ -121,8 +121,8 @@
           <div class="text-center text-secondary" id="search-result-profile-exchange">{{ this.searchService.responseProfileData.exchange}}</div>
 
           <div class="text-center">
-            <button (click)="openBuyModal(this.searchService.responseProfileData.ticker,this.searchService.responseQuoteData.c)" class="btn btn-success mx-2">Buy</button>
-            <button *ngIf="shouldDisplaySellBtn(this.searchService.responseProfileData.ticker)" (click)="openSellModal(this.searchService.responseProfileData.ticker,this.searchService.responseQuoteData.c)" class="btn btn-danger mx-2">Sell</button>
+            <button (click)="openBuyModal(this.searchService.responseProfileData.ticker,this.searchService.responseQuoteData.c)" class="btn btn-success mx-lg-2 mx-md-2 mx-1">Buy</button>
+            <button *ngIf="shouldDisplaySellBtn(this.searchService.responseProfileData.ticker)" (click)="openSellModal(this.searchService.responseProfileData.ticker,this.searchService.responseQuoteData.c)" class="btn btn-danger mx-lg-2 mx-md-2 mx-1">Sell</button>
           </div>
         </div>
 
@@ -131,7 +131,7 @@
         <div class="d-flex flex-column align-items-center justify-content-between col-2">
 
 
-          <img  id="search-result-profile-logo" class="col-9 col-lg-6  " src="{{this.searchService.responseProfileData.logo}}"   >
+          <img  id="search-result-profile-logo" class="col-10 col-lg-6 col-md-8 " src="{{this.searchService.responseProfileData.logo}}"   >
 
         </div>
 
@@ -168,13 +168,14 @@
 
 
     <div id="search-result-tab" class="d-flex justify-content-center" >
-      <mat-tab-group animationDuration="0ms"  class="col-9">
+      <mat-tab-group animationDuration="0ms"  class="col-11 col-lg-9 col-md-9">
 
 
         <mat-tab label="Summary" >
-          <div class="d-flex">
-            <div id="summary-tab-left " class="col-6">
-              <div id="summary-tab-price" class="col-6 text-center" *ngIf="this.searchService.responseQuoteData">
+          <div class="d-flex my-2 flex-lg-row flex-md-row flex-column">
+            <div id="summary-tab-left " class=" col-lg-6 col-md-6">
+
+              <div id="summary-tab-price" class="col-lg-6 col-md-6  text-center" *ngIf="this.searchService.responseQuoteData">
                 <div><b>High Price:</b>{{ this.searchService.responseQuoteData.h}}</div>
                 <div><b>Low Price:</b>{{ this.searchService.responseQuoteData.l}}</div>
                 <div><b>Open Price:</b>{{ this.searchService.responseQuoteData.o}}</div>
@@ -188,7 +189,7 @@
                 <div><b>Web Page:</b><a target="_blank" href="{{ this.searchService.responseProfileData.weburl}}">{{ this.searchService.responseProfileData.weburl }}</a></div>
                 <div><b>Company peers:</b><br></div>
 
-                <div ><a routerLink="/search/{{item}}" *ngFor="let item of this.searchService.responsePeerData">{{ item+" " }}</a></div>
+                <div id="search-result-peer" class="d-flex justify-content-center"><a class="mx-1" routerLink="/search/{{item}}" *ngFor="let item of this.searchService.responsePeerData">{{ item+" " }}</a></div>
 
 
 
@@ -199,7 +200,7 @@
             </div>
 
 
-            <div id="summary-tab-right" class="col-6" *ngIf="highcharts&&this.searchService.hourChartOptions">
+            <div id="summary-tab-right" class="col-lg-6 col-md-6 mt-3 mt-lg-0 mt-md-0" *ngIf="highcharts&&this.searchService.hourChartOptions">
               <highcharts-chart
                 [Highcharts]="highcharts"
                 [options]="this.searchService.hourChartOptions"
@@ -215,19 +216,22 @@
 
 
 
-        <mat-tab label="Top News">
+        <mat-tab label="Top News" >
 
 
-          <div class="row" id="news-container">
-            <div *ngFor="let news of this.searchService.responseNewsData; let i = index" (click)="openNewsModal(content, i)" class="col-6 news-card-container d-flex align-items-center py-2 pe-2">
+          <div class="my-2 d-flex justify-content-center"  id="news-container">
+            <div  class="row w-100 px-2">
 
-              <div  class="bg-light card full-height " >
-                <div class="d-flex full-height">
-                  <div class="col-3 d-flex align-items-center justify-content-center p-3">
+            <div *ngFor="let news of this.searchService.responseNewsData; let i = index" (click)="openNewsModal(content, i)" class="col-lg-6 col-md-6 col-sm-12 col-12 news-card-container-height d-flex align-items-center py-2 px-1">
+
+              <div  class="bg-light card w-100 h-100 " >
+                <div   class="w-100 h-100 news-content">
+
+                  <div class="col-lg-3 col-md-3 d-flex align-items-center justify-content-center p-3 news-img-box">
                     <img src="{{news.image}}" class="news-image " >
                   </div>
-                  <div class="col-9 d-flex align-items-center">
-                    <div class="card-body ">
+                  <div class="col-lg-9 col-md-9 d-flex align-items-center">
+                    <div class="card-body news-headline">
 
                       <p class="card-text text-center news-headline">{{news.headline}}</p>
 
@@ -237,6 +241,8 @@
               </div>
 
             </div>
+          </div>
+
           </div>
 
           <ng-template #content let-modal>
@@ -279,26 +285,26 @@
         </mat-tab>
 
 
-        <mat-tab label="Charts">
-
-          <highcharts-chart *ngIf= "highcharts&&this.searchService.yearChartOptions"
+        <mat-tab label="Charts" >
+<div >
+          <highcharts-chart  *ngIf= "highcharts&&this.searchService.yearChartOptions"
                             [Highcharts]="highcharts"
                             [options]="this.searchService.yearChartOptions"
 
                             style="width: 100%; height: 800px; display: block;"
           ></highcharts-chart>
-
+    </div>
         </mat-tab>
 
-        <mat-tab label="Insights">
+        <mat-tab label="Insights" >
 
-          <div id="insider-container">
+          <div class="my-2" id="insider-container">
 
 
             <div class="insider-sentiment d-flex justify-content-center" *ngIf="this.searchService.responseInsiderData">
-              <div class="col-6"><h4 class="text-center">Insider Sentiments</h4>
+              <div class="col-12 col-md-6 col-lg-6"><h4 class="text-center">Insider Sentiments</h4>
 
-                <table class="col-12 my-3" >
+                <table class="my-3 w-100" >
                   <tr>
                     <th>{{this.searchService.responseProfileData.name}}</th>
                     <th>MSPR</th>
@@ -323,8 +329,8 @@
 
 
             </div >
-            <div class="d-flex">
-              <div class="recommendation-trend col-6 my-3 mx-2" >
+            <div class="d-flex insider-chart-container">
+              <div class="recommendation-trend col-lg-6 col-md-6 col-12 my-3 " >
                 <highcharts-chart *ngIf= "highcharts&&this.searchService.recommendChartOptions"
                                   [Highcharts]="highcharts"
                                   [options]="this.searchService.recommendChartOptions"
@@ -334,7 +340,7 @@
 
               </div>
 
-              <div class="eps-chart">
+              <div class="eps-chart col-lg-6 col-md-6 col-12">
                 <highcharts-chart *ngIf= "highcharts&&this.searchService.epsChartOptions"
                                   [Highcharts]="highcharts"
                                   [options]="this.searchService.epsChartOptions"

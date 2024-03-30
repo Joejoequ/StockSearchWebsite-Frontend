@@ -51,13 +51,13 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
     console.log("search performed "+symbol);
 
-    this.http.get<any>('http://localhost:3000/api/profile?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/profile?symbol=' + symbol).subscribe(data => {
 
       this.responseProfileData = data;
 
     });
 
-    this.http.get<any>('http://localhost:3000/api/quote?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/quote?symbol=' + symbol).subscribe(data => {
 
       this.responseQuoteData = data;
       var linecolor:string;
@@ -70,7 +70,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
       else {
         linecolor='#000000';
       }
-      this.http.get<any>('http://localhost:3000/api/hourStockPrice?symbol=' +symbol).subscribe(data => {
+      this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/hourStockPrice?symbol=' +symbol).subscribe(data => {
 
 
         this.hourChartOptions={
@@ -143,13 +143,13 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
 
 
-    this.http.get<any>('http://localhost:3000/api/peers?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/peers?symbol=' + symbol).subscribe(data => {
 
       this.responsePeerData = data;
     });
 
 
-    this.http.get<any>('http://localhost:3000/api/news?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/news?symbol=' + symbol).subscribe(data => {
 
       this.responseNewsData = data;
     });
@@ -157,7 +157,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
 
 
-    this.http.get<any>('http://localhost:3000/api/yearStockPrice?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/yearStockPrice?symbol=' + symbol).subscribe(data => {
 
 
 
@@ -184,9 +184,45 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
       this.yearChartOptions={
 
+        chart: {
+          backgroundColor: 'rgba(246,244,244,0.82)',
+          events: {
+            load() {
+              const chart = this,
+                startDate = Date.now() - 6 * 30 * 24 * 3600 * 1000,
+                endDate = Date.now()
+
+              chart.xAxis[0].setExtremes(startDate,endDate)
+            }
+          }
+        },
+
         rangeSelector: {
           enabled: true,
-          selected: 1
+          buttons: [{
+            type: 'month',
+            count: 1,
+            text: '1m'
+          }, {
+            type: 'month',
+            count: 3,
+            text: '3m'
+          }, {
+            type: 'month',
+            count: 6,
+            text: '6m'
+          }, {
+            type: 'ytd',
+            text: 'YTD'
+          }, {
+            type: 'year',
+            count: 1,
+            text: '1y'
+          }, {
+            type: 'all',
+            text: 'All'
+          }],
+          selected: 2
         },
         navigator: {
           enabled: true
@@ -245,6 +281,10 @@ constructor(private http: HttpClient,public  userService: UserService) {
         },
 
         plotOptions: {
+
+
+
+
           series: {
             dataGrouping: {
               units: [[
@@ -252,7 +292,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
                 [1]
               ], [
                 'month',
-                [1, 2, 3, 4, 6]
+                [1, 2, 3, 4,6]
               ]]
             }
           }
@@ -268,6 +308,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
           type: 'column',
           name: 'Volume',
           id: 'volume',
+          grouping:true,
           data: volume,
           yAxis: 1
         }, {
@@ -303,7 +344,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
     });
 
-    this.http.get<any>('http://localhost:3000/api/insider?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/insider?symbol=' + symbol).subscribe(data => {
 
 
 
@@ -323,7 +364,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
     });
 
 
-    this.http.get<any>('http://localhost:3000/api/recommendation?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/recommendation?symbol=' + symbol).subscribe(data => {
 
       this.recommendChartOptions = {
         chart: {
@@ -408,7 +449,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
 
 
-    this.http.get<any>('http://localhost:3000/api/earnings?symbol=' + symbol).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/earnings?symbol=' + symbol).subscribe(data => {
 
       this.epsChartOptions = {
 
@@ -470,7 +511,7 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
 
   autoUpdateData(){
-    this.http.get<any>('http://localhost:3000/api/quote?symbol=' + this.responseProfileData.ticker).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/quote?symbol=' + this.responseProfileData.ticker).subscribe(data => {
 
       this.responseQuoteData = data;});
 

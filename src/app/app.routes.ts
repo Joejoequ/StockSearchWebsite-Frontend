@@ -2,14 +2,14 @@
 
 
 
-import { NgModule } from '@angular/core';
+
 import { Routes } from '@angular/router';
 
 import {AppComponentPortfolio} from "./app.component.portfolio";
 import {AppComponentWatchlist} from "./app.component.watchlist";
 import {AppComponentSearch} from "./app.component.search";
 
-import {AppComponent} from "./app.component";
+
 
 export const routes: Routes = [
 

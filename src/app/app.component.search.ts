@@ -94,7 +94,7 @@ this.symbol='';
 
 
 
-        this.http.get<boolean>('http://localhost:3000/api/watchlist/ifStockInWatchlist?symbol=' + this.symbol+'&userid='+this.userService.getUserId()).subscribe(data => {
+        this.http.get<boolean>('https://cs571a3-418806.uc.r.appspot.com/api/watchlist/ifStockInWatchlist?symbol=' + this.symbol+'&userid='+this.userService.getUserId()).subscribe(data => {
 
           this.responseIfStockInWatchlist = data;
 
@@ -124,7 +124,7 @@ this.symbol='';
     const userId = this.userService.getUserId();
     const stockSymbol = this.searchService.responseProfileData.ticker;
 
-    this.http.post<{message:string}>('http://localhost:3000/api/watchlist', {
+    this.http.post<{message:string}>('https://cs571a3-418806.uc.r.appspot.com/api/watchlist', {
       userid: userId,
       stockSymbol: stockSymbol
     }).subscribe({
@@ -149,7 +149,7 @@ this.symbol='';
   removeFromWatchList(userId:string,stockSymbol:string) {
 
 
-    this.http.delete<{message:string}>(`http://localhost:3000/api/watchlist/${userId}/${stockSymbol}`).subscribe({
+    this.http.delete<{message:string}>(`https://cs571a3-418806.uc.r.appspot.com/api/watchlist/${userId}/${stockSymbol}`).subscribe({
       next: (response) => {
         console.log('Removed from watchlist', response);
         if (response.message == "SUCCESS"){
@@ -174,7 +174,7 @@ this.symbol='';
     }
 
     this.autocomplete_isLoading = true;
-    return this.http.get<any[]>('http://localhost:3000/api/autocomplete?symbol=' + value).pipe(
+    return this.http.get<any[]>('https://cs571a3-418806.uc.r.appspot.com/api/autocomplete?symbol=' + value).pipe(
       finalize(() => this.autocomplete_isLoading = false)
     );
   }

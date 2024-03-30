@@ -10,16 +10,25 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse d-flex justify-content-lg-end justify-content-center" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+
+      <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
+
+        <div class="ms-auto me-3 navbar-nav">
+          <div class=" d-flex justify-content-center">
+          <div id="nav-link-container" class="d-flex col-10 mt-3 mt-lg-0 ">
           <a class="nav-link" routerLink="{{getSearchRoute()}}" routerLinkActive="active">Search</a>
           <a class="nav-link"  routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
           <a class="nav-link" routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
-
+          </div>
+        </div>
         </div>
       </div>
     </div>
   </nav>
+
+
+
+
 
   <router-outlet></router-outlet>
 </div>

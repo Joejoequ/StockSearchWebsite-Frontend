@@ -4,6 +4,7 @@ import {UserService} from "./app.service.user";
 import {HttpClient} from "@angular/common/http";
 import {MatOptionModule} from "@angular/material/core";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -15,7 +16,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     MatProgressSpinnerModule,
     NgIf,
     DecimalPipe,
-    NgStyle
+    NgStyle,
+    NgbAlert
   ],
   templateUrl: './app.component.watchlist.html',
   styleUrls: ['./app.component.watchlist.css']
@@ -33,7 +35,7 @@ export class AppComponentWatchlist {
   ngOnInit(){
 
     this.isLoading=true;
-    this.http.get<any>('http://localhost:3000/api/watchlist?userid=' + this.userService.getUserId()).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/watchlist?userid=' + this.userService.getUserId()).subscribe(data => {
 
       this.responseWatchlistData = data;
       this.isLoading=false;
@@ -46,7 +48,7 @@ export class AppComponentWatchlist {
     removeFromWatchList(stockSymbol:string) {
 
 
-        this.http.delete<{message:string}>(`http://localhost:3000/api/watchlist/${this.userService.getUserId()}/${stockSymbol}`).subscribe({
+        this.http.delete<{message:string}>(`https://cs571a3-418806.uc.r.appspot.com/api/watchlist/${this.userService.getUserId()}/${stockSymbol}`).subscribe({
             next: (response) => {
                 console.log('Removed from watchlist', response);
                 if (response.message == "SUCCESS"){

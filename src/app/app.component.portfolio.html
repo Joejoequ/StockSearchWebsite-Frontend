@@ -1,7 +1,7 @@
 
 <div class="d-flex justify-content-center">
 
-  <div class="col-8 py-3">
+  <div class="col-lg-8  col-md-9 col-11 py-3">
     <alert-list></alert-list>
 
 
@@ -17,6 +17,14 @@
 
 
     <div  id="stocklist-container">
+      <div *ngIf="!this.portfolioService.isLoading&&this.portfolioService.responsePortfolioData.stocks.length == 0" class="mt-5">
+        <ngb-alert class="text-center "  type="warning"  [dismissible]="false">
+          Currently you don't have any stock.
+
+
+
+        </ngb-alert>
+      </div>
       <div *ngFor="let walletStock of this.portfolioService.responsePortfolioData.stocks" class="card my-3">
 
 
@@ -26,42 +34,67 @@
 
 
 <div class="card-body">
-  <table class="col-12">
 
-    <colgroup>
-      <col class="col-4">
-      <col class="col-2">
-      <col class="col-4">
-      <col class="col-2" >
-    </colgroup>
-    <tr>
-      <td >Quantity:</td>
-      <td >{{walletStock.quantity| number:'1.2-2'}}</td>
-      <td>Change:</td>
-      <td [ngStyle]="{ 'color': walletStock.price-walletStock.cost/walletStock.quantity > 0 ? 'green' : walletStock.price-walletStock.cost/walletStock.quantity < 0 ? 'red' : 'black' }"><svg *ngIf="walletStock.price-walletStock.cost/walletStock.quantity>=0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
-        <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-      </svg>
 
-        <svg *ngIf="walletStock.price-walletStock.cost/walletStock.quantity<0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-          <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-        </svg>
+  <div class="col-12" >
+    <div class="d-flex wallet-stock-info-container">
 
-        {{walletStock.price-walletStock.cost/walletStock.quantity| number:'1.2-2'}}</td>
-    </tr>
-    <tr>
-      <td>Avg. Cost/Share:</td>
-      <td >{{(walletStock.cost/walletStock.quantity).toFixed(2)}}</td>
-      <td >Current Price:</td>
-      <td [ngStyle]="{ 'color': walletStock.price-walletStock.cost/walletStock.quantity > 0 ? 'green' : walletStock.price-walletStock.cost/walletStock.quantity < 0 ? 'red' : 'black' }">{{walletStock.price}}</td>
-    </tr>
-    <tr>
-      <td>Total Cost: </td>
-      <td >{{walletStock.cost.toFixed(2)}}</td>
 
-      <td>Market Value: </td>
-      <td [ngStyle]="{ 'color': walletStock.price-walletStock.cost/walletStock.quantity> 0 ? 'green' : walletStock.price-walletStock.cost/walletStock.quantity < 0 ? 'red' : 'black' }">{{(walletStock.quantity*walletStock.price).toFixed(2) }}</td>
-    </tr>
-  </table>
+      <div class=" px-1 col-lg-6 col-md-6 col-12">
+        <div class="d-flex justify-content-between">
+          <div>Qunatity:</div>
+          <div class="wallet-stock-data">{{walletStock.quantity| number:'1.2-2'}}</div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <div>Avg. Cost/Share:</div>
+          <div class="wallet-stock-data">{{(walletStock.cost/walletStock.quantity).toFixed(2)}}</div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <div>Total Cost:</div>
+          <div class="wallet-stock-data">{{walletStock.cost.toFixed(2)}}</div>
+        </div>
+
+
+
+
+      </div>
+
+
+      <div class=" px-1 col-lg-6 col-md-6 col-12">
+
+
+        <div class="d-flex justify-content-between">
+          <div>Change:</div>
+          <div class="wallet-stock-data" [ngStyle]="{ 'color': walletStock.price-walletStock.cost/walletStock.quantity > 0 ? 'green' : walletStock.price-walletStock.cost/walletStock.quantity < 0 ? 'red' : 'black' }"><svg *ngIf="walletStock.price-walletStock.cost/walletStock.quantity>=0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+            <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+          </svg>
+
+            <svg *ngIf="walletStock.price-walletStock.cost/walletStock.quantity<0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+            </svg>{{walletStock.price-walletStock.cost/walletStock.quantity| number:'1.2-2'}}</div>
+        </div>
+
+
+        <div class="d-flex justify-content-between">
+          <div>Current Price:</div>
+          <div class="wallet-stock-data" [ngStyle]="{ 'color': walletStock.price-walletStock.cost/walletStock.quantity > 0 ? 'green' : walletStock.price-walletStock.cost/walletStock.quantity < 0 ? 'red' : 'black' }">{{walletStock.price}}</div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div>Market Value:</div>
+          <div class="wallet-stock-data" [ngStyle]="{ 'color': walletStock.price-walletStock.cost/walletStock.quantity> 0 ? 'green' : walletStock.price-walletStock.cost/walletStock.quantity < 0 ? 'red' : 'black' }">{{(walletStock.quantity*walletStock.price).toFixed(2) }}</div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
 
 </div>
         <div class="card-footer text-muted">

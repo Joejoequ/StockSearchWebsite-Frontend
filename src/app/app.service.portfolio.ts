@@ -16,7 +16,7 @@ export class PortfolioService {
 
   getLatestPortfolioData(){
     this.isLoading=true;
-    this.http.get<any>('http://localhost:3000/api/portfolio?userid='+ this.userService.getUserId()).subscribe(data => {
+    this.http.get<any>('https://cs571a3-418806.uc.r.appspot.com/api/portfolio?userid='+ this.userService.getUserId()).subscribe(data => {
 
       this.responsePortfolioData = data;
       this.isLoading=false;
@@ -30,7 +30,7 @@ export class PortfolioService {
   }
 
   sendBuyStockRequest(userid: string, quantity: number, ticker: string) {
-    const url = 'http://localhost:3000/api/portfolio/buy';
+    const url = 'https://cs571a3-418806.uc.r.appspot.com/api/portfolio/buy';
     const body = {userid, quantity, ticker};
 
     return this.http.post(url, body)
@@ -38,7 +38,7 @@ export class PortfolioService {
   }
 
   sendSellStockRequest(userid: string, quantity: number, ticker: string) {
-    const url = 'http://localhost:3000/api/portfolio/sell';
+    const url = 'https://cs571a3-418806.uc.r.appspot.com/api/portfolio/sell';
     const body = {userid, quantity, ticker};
 
     return this.http.post(url, body)
