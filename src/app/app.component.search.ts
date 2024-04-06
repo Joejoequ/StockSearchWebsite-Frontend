@@ -181,7 +181,7 @@ this.symbol='';
 
   onSearchFormClear() {
     this.router.navigate(['/search','home']);
-
+this.searchService.showSearchResult=false;
   }
 
   onSearchFormSubmit(){
@@ -207,7 +207,7 @@ this.symbol='';
 
 
   isTrading(lastTradingTime:any){
-    var lastTrading=new Date(lastTradingTime+300*1000);
+    var lastTrading=new Date((lastTradingTime+300)*1000);
     var current=new Date();
 
     return current<=lastTrading;
