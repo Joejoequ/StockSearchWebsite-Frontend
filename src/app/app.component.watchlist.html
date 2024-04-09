@@ -22,7 +22,7 @@
          <div class="px-lg-4 px-md-4 px-3">
            <button class="watchlist-close-btn btn-close" (click)="removeFromWatchList(watchStock.ticker)"  type="button" aria-label="Close"></button>
          </div>
-       <div class="d-flex mb-4 ">
+       <div class="d-flex mb-4 " routerLink="/search/{{watchStock.ticker}}">
 
          <div class="watchlist-card-left col-6 px-lg-4 px-md-4 px-2">
 

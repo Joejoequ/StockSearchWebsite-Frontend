@@ -500,6 +500,9 @@ constructor(private http: HttpClient,public  userService: UserService) {
 
 
   }
+  else{
+    this.showSearchResult=true;
+  }
   }
 
 

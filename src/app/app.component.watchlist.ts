@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {MatOptionModule} from "@angular/material/core";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
+import {RouterLink} from "@angular/router";
 
 
 @Component({
@@ -17,7 +18,8 @@ import {NgbAlert} from "@ng-bootstrap/ng-bootstrap";
     NgIf,
     DecimalPipe,
     NgStyle,
-    NgbAlert
+    NgbAlert,
+    RouterLink
   ],
   templateUrl: './app.component.watchlist.html',
   styleUrls: ['./app.component.watchlist.css']
